@@ -1,5 +1,6 @@
 import type { Request, Response, NextFunction } from "express";
 import createHttpError from "http-errors";
+
 import userModel from "./userModel.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
@@ -48,7 +49,7 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
       { expiresIn: '7d' }
     );
 
-    res.status(201).json({
+    res.status(201).json({//status code for resource creation
       message: "User created successfully",
       id: newUser._id,
       accessToken: token,
@@ -58,5 +59,8 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
     next(error);
   }
 };
+const loginUser=async(req: Request, res: Response, next: NextFunction)=>{
+  res.json({message:"ohk"})
+}
 
-export { createUser };
+export { createUser,loginUser };
