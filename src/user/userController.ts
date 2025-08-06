@@ -4,6 +4,7 @@ import userModel from "./userModel.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { config } from "../config/config.js";
+import type { User } from "./userTypes.js";
 
 const createUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -13,19 +14,34 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
       return next(createHttpError(400, "All fields are required"));
     }
 
-    const existingUser = await userModel.findOne({ email });
-    if (existingUser) {
+    try {
+      const existingUser = await userModel.findOne({ email });
+      if (existingUser) {
       return next(createHttpError(400, "User already exists with this email"));
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+      } catch (error) {
+        return next(createHttpError(500,"error while getting user"))
+      
+    }
+    let newUser:User;
 
-    const newUser = await userModel.create({
+    try {
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+     newUser = await userModel.create({
       name,
       email,
       password: hashedPassword,
     });
+      
+    } catch (error) {
+      return next(createHttpError(500,"error while creating user"))
+      
+    }
+    
 
+    
     const token = jwt.sign(
       { sub: newUser._id },
       config.jwtSecret as string,
