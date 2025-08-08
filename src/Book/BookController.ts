@@ -1,7 +1,7 @@
 import type { Request, Response, NextFunction } from "express";
 
 const createBook = async (req: Request, res: Response, next: NextFunction) => {
-  res.status(201).json({ message: "Book created (mock response)" });
+  res.json({});
 };
 
 export { createBook };
