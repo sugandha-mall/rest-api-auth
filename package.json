@@ -1,18 +1,30 @@
 {
   "name": "restapi",
   "version": "1.0.0",
-  "description": "mastering the api",
-  "main": "index.js",
+  "type": "module",
   "scripts": {
-  "dev": "ts-node-dev --respawn server.ts"
-},
-  "author": "Sugandha Mall",
-  "license": "ISC",
+    "dev": "ts-node-dev --loader ts-node/esm server.mts"
+  },
   "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
+    "@types/dotenv": "^6.1.1",
+    "@types/express": "^5.0.3",
+    "@types/http-errors": "^2.0.5",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/mongoose": "^5.11.96",
+    "@types/multer": "^2.0.0",
     "@types/node": "^24.1.0",
-    "nodemon": "^3.1.10",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
-    "typescript": "^5.9.2"
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "cloudinary": "^2.7.0",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.17.0",
+    "multer": "^2.0.2"
   }
 }

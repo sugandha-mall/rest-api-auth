@@ -1,18 +1,28 @@
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import express from 'express';
-import Multer  from 'multer';
-import {createBook} from "./BookController.js"
 import multer from 'multer';
+import { createBook } from './BookController.js';
+
+// Fix __dirname for ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const bookRouter = express.Router();
-//store local 
-const upload=multer({
-    dest:path.resolve(__dirname,'../../public/data/uploads'),//multer will create
-    limits:{fileSize:3e7}//30 mb 
-})
-bookRouter.post('/',upload.fields([
-    {name:'coverImage',maxCount:1},
-    {name:'file',maxCount:1},
-]), createBook);
-//userRouter.post('/login', loginUser);
+
+// Store locally
+const upload = multer({
+    dest: path.resolve(__dirname, '../../public/data/uploads'), // multer will create folder if it exists in path
+    limits: { fileSize: 3e7 } // 30 MB
+});
+
+bookRouter.post(
+    '/',
+    upload.fields([
+        { name: 'coverImage', maxCount: 1 },
+        { name: 'file', maxCount: 1 }
+    ]),
+    createBook
+);
 
 export default bookRouter;
