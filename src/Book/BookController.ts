@@ -54,7 +54,11 @@ const createBook = async (req: Request, res: Response, next: NextFunction) => {
       overwrite: true,
       unique_filename: false
     });
+    console.log("bookFileUpload",bookFileUpload);
+    console.log("UploadResult",coverImageUpload);
+    //console.log("user Id",req.userId);
 
+    
     // Save to DB
     const newBook = await bookModel.create({
       title,
