@@ -4,6 +4,7 @@ import cloudinary from "../config/cloudinary.js";
 import path, { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import bookModel from "./bookModel.js";
+import type { AuthRequest } from "../middlewares/authenticate.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -12,7 +13,7 @@ interface MulterFiles {
   [fieldname: string]: Express.Multer.File[];
 }
 
-const createBook = async (req: Request, res: Response, next: NextFunction) => {
+const createBook = async (req: AuthRequest, res: Response, next: NextFunction) => {
   const files = req.files as MulterFiles;
   const { title, genre } = req.body;
 
@@ -60,10 +61,11 @@ const createBook = async (req: Request, res: Response, next: NextFunction) => {
 
     
     // Save to DB
+    //const _req=req as AuthRequest;
     const newBook = await bookModel.create({
       title,
       genre,
-      author: "6890e2a77a6fd2a46516107d", // replace with req.user.id if using auth
+      author: req.userId, // replace with req.user.id if using auth
       coverImage: coverImageUpload.secure_url,
       file: bookFileUpload.secure_url,
     });
