@@ -1,31 +1,23 @@
-import express from 'express';
-import type { Request, Response, NextFunction } from 'express';
-import globalError from './middlewares/globalErrorHandler.js';
+import express from "express";
+import dotenv from "dotenv";
+import mongoose from "mongoose";
 
-import type { HttpError } from 'http-errors';
-import { config } from './config/config.js'
-import userRouter from './user/router.js';
-import bookRouter from './Book/BookRouter.js';
+// ✅ `.js` because after TypeScript compilation, this will be a .js file
+import bookRouter from "./Book/BookRouter.js";
+
+dotenv.config();
 
 const app = express();
 
 app.use(express.json());
+app.use("/api/books", bookRouter);
 
-app.get('/', (_req, res) => {
-  res.json({ message: 'Welcome to API' });
-});
-
-// Global error handler
-// app.use((err: HttpError, req: Request, res: Response, next: NextFunction) => {
-//   const statusCode = err.statusCode || 500;
-
-//   return res.status(statusCode).json({
-//     message: err.message,
-//     errorStack: config.env === 'development' ? err.stack : '',
-//   });
-// });
-app.use(globalError);
-app.use('/api/users',userRouter)
-app.use('/api/books',bookRouter)
-
-export default app;
+mongoose
+  .connect(process.env.MONGO_URI || "mongodb://127.0.0.1:27017/mydb")
+  .then(() => {
+    console.log("✅ MongoDB connected");
+    app.listen(process.env.PORT || 5513, () =>
+      console.log(`🚀 Server running on port ${process.env.PORT || 5513}`)
+    );
+  })
+  .catch((err) => console.error("❌ MongoDB connection error:", err));
